@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 
+        实际项目中，这里应依次引入
+        1、重置样式表；
+        2、公共样式表；
+        3、图表字体库；
+        4、当前页面样式表
+     -->
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_2539292_stc0fvc1kr.css">   
+    <!-- 设置缩略图标 -->
+    <link rel="shortcut icon" href="https://www.mi.com/favicon.ico">
+    <style>
+        /* 1、样式重置 */
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        input{
+            outline-style: none;
+        }
+        ul{
+            list-style: none;
+        }
+        a{
+            text-decoration: none;
+            color: inherit;
+        }
+        h1{
+            font-size: 100%;
+            font-weight: normal;
+        }
+
+        /* 2、公共样式 */
+        .clearfix::before,.clearfix::after{
+            content: "";
+            display: table;
+            clear:both;
+        }
+        body{
+            font: 14px/1.5 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            min-width: 1226px;
+            position: relative;
+            height: 1500px;
+        }
+        .w{
+            /* 版心 */
+            width: 1226px;           
+            margin: 0 auto;
+        }       
+    
+
+        /* 4、当前页面样式 */
+        /* 顶部 */
+        .contain .top{
+            width: 100%;
+            height: 40px;
+            line-height:40px;
+            background-color: #333;
+            color: #b0b0b0;
+            font-size: 12px;
+        }
+
+        /* 分割线样式 */
+        .contain .top .line{
+            width: 1px;
+            height: 13px;
+            background-color: #424242;
+            margin-top:14px ;
+        }
+
+        /* 超链接整体样式 */
+        .contain .top a{
+            display: block;
+            padding: 0 8px;
+        }
+        .contain .top a:hover{
+            color: #fff;
+        }
+
+        /* 设置、合并浮动样式 */
+        .contain .top .top-contain .left,
+        .contain .top .top-contain .left li, 
+        .contain .top .top-contain .right .user li,
+        .contain .top .top-contain .right ul,
+        .contain .top .top-contain .right .car{
+            float: left;
+        }  
+        .contain .top .top-contain .right{
+            float: right;
+        }    
+
+        /* 细节调整 */
+        .contain .top .top-contain .left li:first-of-type a{
+            padding-left: 0;
+        }      
+        .contain .top .top-contain .right .car{
+            height: 100%;
+            padding:0 10px;
+            margin-left: 20px;
+            background-color: #424242; 
+            position: relative;            
+        }
+        .contain .top .top-contain .right .car:hover{
+            color:orange;
+            background-color: #fff;
+        }
+        .contain .top .top-contain .right .car span{
+            float: left;
+        }
+        .contain .top .top-contain .right .car span:first-of-type{
+            margin-right: 3px;
+        }
+
+        /* 弹出层样式设置 */
+        .contain .top .top-contain .left li:nth-of-type(21){
+            position: relative;         
+        }
+        .contain .top .top-contain .left li:nth-of-type(21):hover .pop-qrcode{
+           display: block;         
+        }
+        .contain .top .top-contain .left li:nth-of-type(21) .pop-qrcode{
+            position: absolute;
+            top: 100%;
+            left: -26px;          
+            width: 116px;
+            height: 140px;
+            background-color: #fff;
+            text-align: center;
+            box-shadow: 0 5px 5px #b0b0b052;
+            display: none;
+            z-index: 9;
+        }
+        .contain .top .top-contain .left li:nth-of-type(21) .pop-qrcode img{
+            width: 85px;
+            height: 85px;
+            margin: 15px 0;
+        }
+        .contain .top .top-contain .left li:nth-of-type(21) .pop-qrcode p{
+            font-size: 16px;
+            margin: -30px;
+        }
+        .contain .top .top-contain .left li:nth-of-type(21) .pop-qrcode::before{
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: -16px;
+            margin-left: -8px;
+            /* 制作小三角：法一（可能有兼容性问题） */
+            /*                         
+            width: 16px;
+            height: 16px;
+            background: #000;
+            clip-path: polygon(0% 100%,50% 50%,100% 100%);
+             */
+
+             /* 制作小三角：法二 */         
+            border: 8px solid transparent;
+            border-bottom: 8px solid #fff;          
+        }
+        .contain .top .top-contain .right .car .pop-shopcar{
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 320px;
+            line-height: 100px;
+            box-shadow: 0 5px 5px #b0b0b052;          
+            background-color: #fff;
+            text-align: center;
+            height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+            z-index: 9;
+        }
+        .contain .top .top-contain .right .car:hover .pop-shopcar{
+            height: 100px;
+        }     
+        /* 顶部结束 */
+
+
+        /* 头部 */
+        .contain .menu{
+            height: 100px;
+            font-size: 16px;
+            /* 作为弹出框定位的祖宗元素 */
+            position: relative;
+            width: 100%;
+        }
+        /* 左侧logo */
+        .contain .menu .logo{
+            float: left;  
+            width: 55px;
+            height: 55px;        
+            margin-top: 22.5px;  
+            position: relative; 
+            /* 利用缩进隐藏文字 */
+            text-indent:-9999px;                 
+        }
+        .contain .menu .logo a{
+            display: block;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height:100%;
+            background: url("http://s02.mifile.cn/assets/static/image/logo-mi2.png") no-repeat center/cover;
+        }
+
+        /* 中间导航 */
+        .contain .menu .nav{
+            float: left;
+            margin-left: 80px;
+            color: #333;
+        }
+        .contain .menu .nav li{
+            float: left;     
+        }
+        /* 修改通用导航的部分样式 */
+        .contain .menu .nav li:first-of-type{
+            visibility: hidden;
+        }
+        .contain .menu .nav li a{
+            display: block;
+            padding:0 10px;
+            line-height: 100px;          
+        }
+        .contain .menu .nav li a:hover{
+            color: orange;
+        }
+
+        /* 设置产品弹出层：样式是统一的，里面的数据需用js切换 */
+        .contain .menu .nav .pop-product{
+            /* 相对定位的祖先元素是menu */
+            position: absolute;
+            top:100%;
+            left:0;
+            width: 100%;
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s;
+            background-color: #fff;        
+            z-index: 99;
+        }
+        /* 用伪元素实现弹窗的上边框效果，因如果直接设置边框，其在悬停时出现/消失效果比较突兀 */
+        .contain .menu .nav .pop-product::before{
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            top: 1px;
+            left: 0;
+            background-color: #b0b0b05b;
+        }
+        /* 设置悬停出现&保持弹窗效果 */
+        .contain .menu .nav li:nth-of-type(-n+8):hover~.pop-product,
+        .contain .menu .nav .pop-product:hover{
+            height: 228px;
+            box-shadow: 0 3px 3px #b0b0b05b;
+        }
+
+        /* 右侧搜索栏 */
+        .contain .menu .search{
+            float: right;
+            margin-top: 25px;         
+        }      
+        /* 设置输入框和搜索按钮的样式 */
+        .contain .menu .search input{
+            float: left;
+            width: 246px;
+            height: 50px;
+            border: 1px solid #e0e0e0;
+            border-right: none;
+        }
+        .contain .menu .search .s-icon{
+            float: left;
+            width: 52px;
+            height: 50px;
+            background-color: #fff;
+            font-size: 25px;
+            color: #616161;
+            border: 1px solid #e0e0e0;           
+            text-align: center;
+            line-height: 50px;  
+            cursor: pointer;        
+        }
+
+        /* 设置搜索栏的悬停&聚焦效果 */
+        .contain .menu .search form:hover>*{
+            border-color:#b1b1b1
+        }
+        .contain .menu .search .s-icon:hover{
+            background-color: orange;
+            border: 1px solid orange;
+            color: #fff;           
+        }
+        .contain .menu .search input:focus,
+        .contain .menu .search input:focus+.s-icon{
+            border-color:orange;
+        }
+        /* 头部结束 */
+        
+
+        /* banner */
+        .contain .banner{
+            height: 460px;
+            position: relative;           
+        }
+        /* banner图 */
+        .contain .banner .banner-img{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .contain .banner .banner-img li{
+            position: absolute;
+        }
+        .contain .banner .banner-img li a{
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .contain .banner .banner-img li a img{
+            width: 100%;
+            height: 100%;
+        }
+        /* 产品分类导航实际应在头部 */
+        .contain .banner .category{
+            position: absolute;
+            width: 234px;
+            height: 100%;
+            z-index: 9;
+            background-color: rgba(140, 140, 140, 0.6);
+            padding: 20px 0;
+        }
+        .contain .banner .category li a{
+            display: block;
+            height: 42px;
+            line-height: 42px;
+            width: 100%;
+            padding: 0 30px;
+            color: #fff;
+        }
+        .contain .banner .category li a span{
+            vertical-align:bottom;
+            font-size: 15px;
+            float: right;
+        }
+        .contain .banner .category li a:hover{
+            background-color: orange;
+        }
+        /* 切换箭头 */
+        .contain .banner .arrow a{
+            position: absolute;
+            width: 41px;
+            height: 69px;
+            text-align: center;
+            line-height: 69px;
+            background-color: transparent;
+            font-size:41px;
+            font-family:monospace;          
+            color: #b0b0b0;
+            left: 234px;
+            top: 50%;        
+        }    
+        .contain .banner .arrow .arr-r{
+            left: auto;
+            right: 0;
+        }
+        .contain .banner .arrow .arr-r:hover,
+        .contain .banner .arrow .arr-l:hover{
+            background-color:rgba(140, 140, 140, 0.6);
+            color: #fff;
+        }
+        /* 切换小圆点 */
+        .contain .banner .order{
+            position: absolute;
+            bottom: 22px;
+            right: 35px;
+        }
+        .contain .banner .order li{
+            float: left;
+        }
+        .contain .banner .order li a{
+            display: block;      
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.4);      
+            margin-right: 5px;
+        }
+        .contain .banner .order li a:hover,
+        .contain .banner .order li:first-of-type a{
+            background-color: rgba(255, 255, 255, 0.4);
+            border: 2px solid rgba(0, 0, 0, 0.4); 
+        }
+        /* banner结束 */
+
+        
+        /* 固定工具栏 */
+        .contain .tool{
+            /* 相对视口定位 */
+            position: fixed;
+            left: 50%;   
+            bottom: 60px;
+            margin-left: 613px;      
+            width: 26px;
+            height: 206px;
+            border: 1px solid #eee;
+            border-bottom: none;
+        }
+        .contain .tool li a{
+            display: block;
+            width: 100%;
+            height: 41px;
+            border-bottom: 1px solid #eee;
+        }
+        /* 固定工具栏结束 */
+
+
+        /* 专栏 */
+        .contain .column{
+            margin-top: 14px;
+        }
+        /* 左侧活动栏 */
+        .contain .column .activity{
+            width: 234px;
+            background-color: #5f5750;
+            float: left;
+        }
+        .contain .column .activity li{
+            float: left;
+        }
+        .contain .column .activity li a{
+            display: block;
+            width: 78px;
+            height: 85px;
+            position: relative;
+    
+        }
+        .contain .column .activity li a::before{
+            content: "";
+            position: absolute;
+            width: 65px;
+            height: 1px;
+            background-color: #cfccca1a;
+            top: 1px;
+            left: 8px;
+        }
+        .contain .column .activity li a::after{
+            content: "";
+            position: absolute;
+            width: 1px;
+            height: 70px;
+            background-color: #cfccca1a;
+            top: 8px;
+            left: 1px;
+        }
+        /* 广告栏 */
+        .contain .column .ad{
+            float: left;
+            margin-left: 2px;
+         
+        }
+        .contain .column .ad li{
+            float: left;
+            margin-left: 14px;
+        }
+        .contain .column .ad li a{
+            display: block;
+            width: 316px;
+            height: 170px;
+        }
+        .contain .column .ad li a img{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面整体容器 -->
+    <div class="contain">
+        <!-- 顶部 -->
+        <div class="top">
+            <div class="top-contain w clearfix">  
+                <!-- 内部布局 -->
+                <ul class="left">
+                    <li><a href="">小米商城</a></li>
+                    <li class="line"></li>
+                    <li><a href="">MIUI</a></li>
+                    <li class="line"></li>
+                    <li><a href="">IoT</a></li>
+                    <li class="line"></li>
+                    <li><a href="">云服务</a></li>
+                    <li class="line"></li>
+                    <li><a href="">金融</a></li>
+                    <li class="line"></li>
+                    <li><a href="">有品</a></li>
+                    <li class="line"></li>
+                    <li><a href="">小爱开放平台</a></li>
+                    <li class="line"></li>
+                    <li><a href="">企业团购</a></li>
+                    <li class="line"></li>
+                    <li><a href="">资质证照</a></li>
+                    <li class="line"></li>
+                    <li><a href="">协议规则</a></li>
+                    <li class="line"></li>
+                    <li>
+                        <a href="">下载app</a>
+                        <div class="pop-qrcode">
+                            <img src="https://i1.mifile.cn/f/i/17/appdownload/download.png?1" alt="github">
+                            <p>二维码</p>
+                        </div>
+                    </li>
+                    <li class="line"></li>
+                    <li><a href="">Selection Location</a></li>
+                </ul>               
+                <div class="right">
+                    <ul class="user">
+                        <li><a href="">登录</a></li>
+                        <li class="line"></li>
+                        <li><a href="">注册</a></li>
+                        <li class="line"></li>
+                        <li><a href="">消息通知</a></li>
+                    </ul>
+                    <a href="" class="car">
+                        <span class="iconfont icon-gouwuche"></span>
+                        <span>购物车（0）</span>
+                        <div class="pop-shopcar">空空如也~</div>
+                    </a>
+                </div> 
+            </div>
+        </div>
+
+        <!-- 头部 -->
+        <div class="menu">
+            <div class="menu-contain w clearfix"> 
+                <h1 class="logo" title="keyword">
+                    <!-- 文字部分为品牌名等，用于SEO -->
+                    keyword
+                    <a href=""></a>
+                </h1>
+
+                <ul class="nav clearfix">
+                    <!-- 对于通用但在不同页面的有小调整的结构，需提前设计好样式 --> 
+                    <li><a href="">全部商品分类</a></li>
+                    <li><a href="">小米手机</a></li>
+                    <li><a href="">Redmi红米</a></li>
+                    <li><a href="">电视</a> </li>
+                    <li><a href="">笔记本</a></li>
+                    <li><a href="">家电</a></li>
+                    <li><a href="">路由器</a> </li>
+                    <li><a href="">智能硬件</a></li>
+                    <li><a href="">服务</a></li>
+                    <li><a href="">社区</a></li>
+                    <li class="pop-product"></li>
+                </ul>
+                        
+                <div class="search">
+                    <form action="#" class="clearfix">
+                        <input type="search">
+                        <button class="s-icon iconfont icon-sousuokuang"></button>
+                    </form>          
+                </div>
+            </div>           
+        </div>
+
+        <!-- banner -->
+        <div class="banner w">
+            <!-- 轮播图：需用js实现 -->
+            <ul class="banner-img">
+                <li>
+                    <a href="#">
+                        <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/5e896d87c53a449509c14701673098bb.jpg?thumb=1&w=1226&h=460&f=webp&q=90" alt="keyword4">
+                    </a>
+                    
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/7f2e0acc18c3d9b6a9c1ab9e8281fbd6.jpg?thumb=1&w=1226&h=460&f=webp&q=90" alt="keyword2">
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/1c3e97686468231f3f78048d7f2b7fdc.jpg?thumb=1&w=1226&h=460&f=webp&q=90" alt="keyword3">
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/268aadece1368da98fcf5553b657cdb3.jpg?w=2452&h=920" alt="keyword1">
+                    </a>
+                </li>
+            </ul>
+            <!--对照官网结构，category部分实际是头部中“全部商品分类”的悬停弹出框 -->
+            <ul class="category">
+                <li><a href="">手机 电话卡 <span class="iconfont icon-jiantou"></span></a></li>
+                <li><a href="">电视 盒子<span class="iconfont icon-jiantou"></span></a></li>
+                <li><a href="">笔记本 显示器<span class="iconfont icon-jiantou"></span></a></li>
+                <li><a href="">家电 插线板<span class="iconfont icon-jiantou"></span></a></li>
+                <li><a href="">出行 穿戴<span class="iconfont icon-jiantou"></span></a></li>
+                <li><a href="">智能 路由器<span class="iconfont icon-jiantou"></span></a></li>
+                <li><a href="">电源 配件<span class="iconfont icon-jiantou"></span></a></li>
+                <li><a href="">健康 儿童<span class="iconfont icon-jiantou"></span></a></li>
+                <li><a href="">耳机 音箱<span class="iconfont icon-jiantou"></span></a></li>
+                <li><a href="">生活 箱包<span class="iconfont icon-jiantou"></span></a></li>
+            </ul>
+            <!-- 切换箭头 -->
+            <div class="arrow">
+                <a href="" class="arr-l">&lt;</a>
+                <a href="" class="arr-r">&gt;</a>
+            </div>
+            <!-- 切换小圆点 -->
+            <ul class="order">
+                <li><a href=""></a> </li>
+                <li><a href=""></a> </li>
+                <li><a href=""></a> </li>
+                <li><a href=""></a> </li>
+            </ul>
+        </div>
+
+        <!-- 固定工具栏 -->
+        <ul class="tool">
+            <li><a href=""></a></li>
+            <li><a href=""></a></li>
+            <li><a href=""></a></li>
+            <li><a href=""></a></li>
+            <li><a href=""></a></li>
+        </ul>
+
+        <!-- 广告栏 -->
+        <div class="column w clearfix">
+            <ul class="activity clearfix">
+                <li><a href=""></a></li>
+                <li><a href=""></a></li>
+                <li><a href=""></a></li>
+                <li><a href=""></a></li>
+                <li><a href=""></a></li>
+                <li><a href=""></a></li>
+            </ul>
+            <ul class="ad clearfix">
+                <li><a href=""><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/5d4298059889417157e8492750328492.jpg?w=632&h=340" alt=""></a></li>
+                <li><a href=""><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/b30177d629bfbe2fb42251c1b8538f7b.jpg?w=632&h=340" alt=""></a></li>
+                <li><a href=""><img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/9f18ac756fa2cedb16ea429b9c0001af.png?w=632&h=340" alt=""></a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
